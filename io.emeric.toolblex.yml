@@ -194,6 +194,10 @@ modules:
         sha256: d2cc9bdecd497294f2c2e6dffb4a000fe087d3b143aae8d8995244946cb95739
         x-checker-data:
           is-main-source: true
-          type: github
-          repo: emericg/toolBLEx
-          source-archive: tarball
+          type: json
+          url: https://api.github.com/repos/emericg/toolBLEx/releases?per_page=100
+          version-query: >-
+            map(select(.draft == false and (.tag_name | test("^v[0-9]+(\\.[0-9]+)+$"))))
+            | max_by(.tag_name | ltrimstr("v") | split(".") | map(tonumber))
+            | .tag_name | ltrimstr("v")
+          url-query: '"https://github.com/emericg/toolBLEx/archive/refs/tags/v" + $version + ".tar.gz"'
